@@ -4,6 +4,12 @@ pipeline {
             label 'agent1'
         }
     }
+    options {
+        timeout(time:1 , unit:'min')
+    }
+    environment {
+        greeting='Good morning'
+    }
     stages {
         stage('build'){
             steps {
@@ -12,13 +18,21 @@ pipeline {
         }
         stage('deploy'){
             steps {
-            echo "This stage is for deploy"
+            sh """
+                  echo "This stage is for deploy ${greeting}"
+            """
             }
         }
     }
     post {
         always {
             echo "Above pipeline is to build and deploy code"
+        }
+        failure{
+            echo "pipeline is failed"
+        }
+        success{
+            echo"pipeline is success"
         }
     }
 }
