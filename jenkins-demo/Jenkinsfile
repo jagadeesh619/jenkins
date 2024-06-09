@@ -1,0 +1,16 @@
+pipeline {
+    agent any
+    stages {
+        stage 'build' {
+                echo "This stage is for building"
+        }
+        stage 'deploy' {
+            echo "This stage is for deploy"
+        }
+    }
+    post {
+        always {
+            echo "Above pipeline is to build and deploy code"
+        }
+    }
+}
