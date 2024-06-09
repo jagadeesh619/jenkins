@@ -19,7 +19,8 @@ pipeline {
         stage('deploy'){
             steps {
             sh """
-                  echo "This stage is for deploy ${greeting}"
+                  echo "This stage is for deploy "
+                  echo "$greeting"
             """
             }
         }
