@@ -25,7 +25,7 @@ pipeline{
         stage('get version'){
             steps{
                 script {
-                    
+
                     def readjson=readJSON file: "package.json"
                     packageversion=readjson.version
                     echo "The version of package is : ${packageversion}"
@@ -37,6 +37,7 @@ pipeline{
     post{
         always{
                   echo "This Pipeline is always runs"
+                  deletedir()
         }
         failure{
                   echo "pipeline there is error"
