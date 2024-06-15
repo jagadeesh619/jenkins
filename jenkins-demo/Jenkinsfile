@@ -23,12 +23,21 @@ pipeline {
     }
     stages {
         stage('build'){
+            input{
+                "message : should we continue or not ?"
+                "ok , please continue " 
+            }
             steps {
                 echo "This stage is for building"
             }
         }
         stage('deploy'){
             steps {
+                when{
+                    expression {
+                        "${params.CHOICE}" == "one"
+                    }
+                }
             sh """
                   echo "This stage is for deploy "
                   echo "$greeting"

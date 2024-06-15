@@ -39,7 +39,7 @@ pipeline{
     post{
         always{
                   echo "This Pipeline is always runs"
-                  deletedir()
+                //   deletedir()
         }
         failure{
                   echo "pipeline there is error"
