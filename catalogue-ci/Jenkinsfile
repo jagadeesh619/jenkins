@@ -1,14 +1,19 @@
 pipeline{
     agent{
-             node{
+            node{
+
                 label 'AGENT-1'
-             }
+            }
     }
     environment {
         packageversion=""
+        nexusURL="IP:8081"
     }
     options{
         ansiColor('xterm')
+    }
+    parameters{
+        booleanParam(name:'deploy' , defaultValue: false , description: 'Should i Deploy or not ?')
     }
     stages{
         stage('clone'){
@@ -16,15 +21,6 @@ pipeline{
                    echo "Already cloned the code to github"
             }
         }
-    
-    // stage('build'){
-    //     steps{
-    //          sh """
-    //             cd catalogue-ci
-    //             npm install
-    //          """
-    //     }
-    // }
         stage('get version'){
             steps{
                 script {
@@ -35,15 +31,76 @@ pipeline{
                     }                
                 }
             } 
+        }
+        stage('install dependencies'){
+        steps{
+             sh """
+                cd catalogue-ci
+                npm install
+
+             """
+            }
+        }
+        stage('Unit tests') {
+            steps {
+                sh """
+                    echo "unit tests will run here"
+                """
+            }
         } 
+        stage('Build') {
+            steps {
+                sh """
+                    cd catalogue-ci
+                    ls -la
+                    zip -q -r catalogue.zip ./* -x ".git" -x "*.zip"
+                    ls -ltr
+                """
+            }
+        }
+        stage('Publish Artifact') {
+            steps {
+                 nexusArtifactUploader(
+                    nexusVersion: 'nexus3',
+                    protocol: 'http',
+                    nexusUrl: "${nexusURL}",
+                    groupId: 'com.roboshop',
+                    version: "${packageversion}",
+                    repository: 'catalogue',
+                    credentialsId: 'nexus-auth',
+                    artifacts: [
+                        [artifactId: 'catalogue',
+                        classifier: '',
+                        file: 'catalogue.zip',
+                        type: 'zip']
+                    ]
+                )
+            }
+        }
+        stage ('Deploy') {
+            when {
+                expression {
+                    ${params.deploy} == true
+                }
+            }
+            steps{
+                script {
+                    def params = [
+                        string(name: 'version', value: "$packageVersion"),
+                        string(name: 'environment', value: "dev")
+                    ]
+                    build job : "catalogue-cd" , wait : true , parameters : params
+                }
+            }
+        }
     }  
     post{
         always{
                   echo "This Pipeline is always runs"
-                //   deletedir()
+                deleteDir()
         }
         failure{
-                  echo "pipeline there is error"
+                  echo "In pipeline there is error"
         }
         success{
                   echo "pipeline is success"
