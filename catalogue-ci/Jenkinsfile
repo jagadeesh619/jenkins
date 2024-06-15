@@ -5,7 +5,7 @@ pipeline{
              }
     }
     environment {
-        Packageversion=""
+        packageversion=""
     }
     options{
         ansiColor('xterm')
@@ -29,7 +29,7 @@ pipeline{
             steps{
                 script {
                     cd catalogue-ci
-                    def readjson=readJSON file: "package.json"
+                    def readjson=readJSON file: 'package.json'
                     packageversion=readjson.version
                     echo "The version of package is : ${packageversion}"                
                 }
