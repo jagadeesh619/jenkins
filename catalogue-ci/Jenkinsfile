@@ -1,0 +1,30 @@
+pipeline{
+    agent{
+             node{
+                label 'AGENT-1'
+             }
+    }
+    stages{
+        stage('clone'){
+            steps{
+                   echo "Already cloned the code to github"
+            }
+        }
+    }
+    stage(''){
+        steps{
+
+        }
+    }
+    post{
+        always{
+                  
+        }
+        failure{
+
+        }
+        success{
+
+        }
+    }
+}
