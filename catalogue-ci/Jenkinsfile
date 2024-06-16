@@ -13,12 +13,13 @@ pipeline{
     options{
         ansiColor('xterm')
     }
-    
+
     parameters{
         booleanParam(name:'deploy' , defaultValue: false , description: 'Should i Deploy or not ?')
     }
     stages{
         stage('clone'){
+            
             steps{
                    echo "Already cloned the code to github"
             }
