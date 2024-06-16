@@ -13,6 +13,7 @@ pipeline{
     options{
         ansiColor('xterm')
     }
+    
     parameters{
         booleanParam(name:'deploy' , defaultValue: false , description: 'Should i Deploy or not ?')
     }
