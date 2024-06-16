@@ -1,13 +1,14 @@
 pipeline{
-    agent{
-            node{
+    agent any
+    // agent{
+    //         node{
 
-                label 'AGENT-1'
-            }
-    }
+    //             label 'AGENT-1'
+    //         }
+    // }
     environment {
         packageversion=""
-        nexusURL="IP:8081"
+        nexusURL="54.84.159.69:8081"
     }
     options{
         ansiColor('xterm')
