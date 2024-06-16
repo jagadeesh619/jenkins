@@ -61,7 +61,9 @@ pipeline{
         }
         stage('Publish Artifact') {
             steps {
-                 nexusArtifactUploader(
+                script {
+
+                    dir('catalogue-ci') {nexusArtifactUploader(
                     nexusVersion: 'nexus3',
                     protocol: 'http',
                     nexusUrl: "${nexusURL}",
@@ -74,8 +76,10 @@ pipeline{
                         classifier: '',
                         file: 'catalogue.zip',
                         type: 'zip']
-                    ]
-                )
+                        ]
+                      )
+                    }
+                }
             }
         }
         stage ('Deploy') {
